@@ -1,0 +1,55 @@
+# Python-related
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyo
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Byte-compiled / optimized / compiled code
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.idea/
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Astra secure connect bundle
+*.zip
+secure_connect_*.zip
+
+# FastAPI specific
+*.sqlite3
+uvicorn.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+~$*
+
+# Test results
+.coverage
+.tox/
+.nox/
+pytest_cache/
