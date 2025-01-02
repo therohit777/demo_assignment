@@ -1,8 +1,11 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from fastapi import Depends, File, HTTPException, UploadFile
 from datetime import datetime
 import pytz
 from app import app
+from app.controllers.add_comments_controller import add_comment_controller
+from app.controllers.add_likes_controller import increase_likes_controller
+from app.controllers.get_post_controllers import get_all_posts
 from app.models.schema import ApiResponse,PostSchema
 from app.controllers.creat_post_controller import create_post_controller
 
@@ -51,4 +54,15 @@ def create_post(
             detail=f"Failed to create post: {str(e)}"
         )
 
+@app.get("/getposts")
+def fetch_all_posts():
+    return get_all_posts()
+
+@app.put("/post/{post_id}/like")
+def increase_likes(post_id: str):
+    return increase_likes_controller(post_id)
+
+@app.post("/post/{post_id}/comment")
+def add_comment(post_id: str, comment: Dict[str, str]):
+    return add_comment_controller(post_id, comment)
 

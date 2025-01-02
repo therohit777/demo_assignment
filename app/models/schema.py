@@ -8,9 +8,8 @@ class ApiResponse(BaseModel):
     data: Union[List[dict], dict, None]
 
 class PostSchema(BaseModel):
-    likes: int = Field(default=0)  # Default value is 0
-    shares: int = Field(default=0)  # Default value is 0
-    postTypes: str  # e.g., "carousel", "reels", "static"
-    comments: Optional[Union[List[str], dict, str]] = Field(default_factory=list)  # Optional, defaults to an empty list
+    likes: int = Field(default=0)  
+    shares: int = Field(default=0) 
+    comments: Optional[Union[List[str], dict, str]] = Field(default_factory=list) 
     username: str
 
