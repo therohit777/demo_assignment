@@ -6,7 +6,7 @@ from app import app
 from app.controllers.add_comments_controller import add_comment_controller
 from app.controllers.add_likes_controller import increase_likes_controller
 from app.controllers.get_post_controllers import get_all_posts
-from app.models.schema import ApiResponse,PostSchema
+from app.models.schema import ApiResponse, CommentSchema,PostSchema
 from app.controllers.creat_post_controller import create_post_controller
 
 @app.get("/server-check")
@@ -62,7 +62,7 @@ def fetch_all_posts():
 def increase_likes(post_id: str):
     return increase_likes_controller(post_id)
 
-@app.post("/post/{post_id}/comment")
-def add_comment(post_id: str, comment: Dict[str, str]):
+@app.post("/post/{post_id}/comment", response_model=ApiResponse)
+def add_comment(post_id: str, comment: CommentSchema):
     return add_comment_controller(post_id, comment)
 

@@ -1,5 +1,5 @@
 from pydantic import BaseModel,Field
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 from fastapi import UploadFile
 
 class ApiResponse(BaseModel):
@@ -8,8 +8,11 @@ class ApiResponse(BaseModel):
     data: Union[List[dict], dict, None]
 
 class PostSchema(BaseModel):
-    likes: int = Field(default=0)  
-    shares: int = Field(default=0) 
-    comments: Optional[Union[List[str], dict, str]] = Field(default_factory=list) 
+    likes: int = Field(default=0)
+    shares: int = Field(default=0)
+    # comments: Optional[List[Dict[str, str]]] = Field(default_factory=list)
     username: str
 
+class CommentSchema(BaseModel):
+    username: str
+    content: str

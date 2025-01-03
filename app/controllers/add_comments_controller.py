@@ -1,15 +1,15 @@
-from typing import Dict
+from astrapy import Collection
 from fastapi import HTTPException
 from app.database.database_connection import get_database_client
-from app.models.schema import ApiResponse
+from app.models.schema import ApiResponse, CommentSchema
 
 
-def add_comment_controller(post_id: str, comment: Dict[str, str]):
+def add_comment_controller(post_id: str, comment: CommentSchema):
     try:
         # Get database client and collection
         db = get_database_client()
         collection_name = "posts"
-        my_collection = db.get_collection(collection_name)
+        my_collection: Collection = db.get_collection(collection_name)
 
         # Ensure the post exists
         post = my_collection.find_one({"_id": post_id})
@@ -19,20 +19,37 @@ def add_comment_controller(post_id: str, comment: Dict[str, str]):
                 detail=f"Post with ID {post_id} not found."
             )
 
-        # Add the new comment to the post's comments list
-        comment_list = post.get("comments", [])
-        comment_list.append(comment)
+        # Prepare the new comment
+        new_comment = {
+            "username": comment.username,
+            "content": comment.content
+        }
+        if not new_comment["content"]:
+            raise HTTPException(
+                status_code=400,
+                detail="Comment content cannot be empty."
+            )
+
+        # Ensure comments follow expected structure
+        comments = post.get("comments", [])
+        if not isinstance(comments, list):
+            comments = []
+        comments.append(new_comment)
+
+        # Update only the comments field in the database
         my_collection.update_one(
             {"_id": post_id},
-            {"$set": {"comments": comment_list}}
+            {"$set": {"comments": comments}}
         )
 
         return ApiResponse(
             status_code=200,
             message="Comment added successfully.",
-            data={"post_id": post_id, "comments": comment_list}
+            data={"post_id": post_id, "new_comment": new_comment}
         )
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as e:
         raise HTTPException(
             status_code=500,
